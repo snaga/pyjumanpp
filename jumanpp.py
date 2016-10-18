@@ -15,21 +15,17 @@ def popen_jumanapp():
     assert p is not None
     return p
 
-jumanpp = popen_jumanapp()
-
 @app.route("/jumanpp")
 def _jumanpp():
-    global jumanpp
-
     text = request.args.get('q')
     if text is None or len(text) == 0:
         return json.dumps({'text': None, 'jumanpp': None})
 
+    jumanpp = popen_jumanapp()
+
     (stdout_data, stderr_data) = jumanpp.communicate(text.encode('utf-8') + '\n')
     assert stdout_data is not None
     assert stderr_data is not None
-
-    jumanpp = popen_jumanapp()
 
     tokens = stdout_data.split('\n')
     res = []
